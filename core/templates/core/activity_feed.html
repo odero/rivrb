@@ -1,0 +1,40 @@
+{% load staticfiles %}
+
+<div class="activity-feed">
+    {% for status in statuses %}
+        {% include 'core/activity_feed_item.html' %}
+    {% empty %}
+    <div class="feed clearfix feed-demo">
+        <div class="user-pic">
+            <img src={% static "flat-ui/images/demo/browser-author.jpg" %} class="img-thumbnail">
+        </div>
+        <div class="feed-info">
+            <div class="feed-context">
+                <span class="user-name"><a href="#">@TheGeniusMartian</a></span>
+                <span class="activity-mode pull-right"><i class="icon-twitter"></i></span>
+                <span class="feed-time text-muted pull-right">40 Seconds ago</span>
+            </div>
+            <div class="feed-content">
+                #Twpple is rocking it. This is a good start. It is going to be a great launch.
+                Everyone will have their halloween costumes on while riding on quad-bikes.
+            </div>
+        </div>
+    </div>
+    <div class="feed clearfix feed-demo">
+        <div class="user-pic">
+            <img src={% static "flat-ui/images/demo/browser-author.jpg" %} class="img-thumbnail">
+        </div>
+        <div class="feed-info">
+            <div class="feed-context">
+                <span class="user-name"><a href="#">@TheGeniusMartian</a></span>
+                <span class="activity-mode pull-right"><i class="icon-rss"></i></span>
+                <span class="feed-time text-muted pull-right">2 hours ago</span>
+            </div>
+            <div class="feed-content">
+                #Twpple is rocking it. This is a good start. It is going to be a great launch.
+                Everyone will have their halloween costumes on while riding on quad-bikes.
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

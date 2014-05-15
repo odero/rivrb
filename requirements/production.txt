@@ -1,0 +1,3 @@
+-r base.txt
+django-herokuify==1.0.pre3
+waitress==0.8.8

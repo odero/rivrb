@@ -1,0 +1,24 @@
+{% load staticfiles %}
+
+<div class="feed clearfix">
+    <div class="user-pic">
+        <img src="{{ status.user.profile_image_url }}" class="img-thumbnail">
+    </div>
+    <div class="feed-info">
+        <div class="feed-context">
+            <span class="user-name">
+            <a href="https://twitter.com/{{ status.user.screen_name }}">{{ status.user.name }} (@{{ status.user.screen_name }})</a>
+            </span>
+            <span class="feed-time text-muted pull-right">
+                <a href="https://twitter.com/{{ status.user.screen_name }}/status/{{ status.id }}" target="_blank">
+                    <time class="timeago" datetime="{{ status.created_at|date:'c' }}">
+                        {{ status.created_at|date:"F j, o" }}
+                    </time>
+                </a>
+            </span>
+        </div>
+        <div class="feed-content">
+            {{ status.text }}
+        </div>
+    </div>
+</div>

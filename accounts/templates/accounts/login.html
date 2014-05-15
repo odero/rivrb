@@ -1,0 +1,53 @@
+{% extends "retweetit/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="vertical-space visible-md">&nbsp;</div>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            {% for message in messages %}
+                <p class="alert alert-success">
+                    <em>{{ message }}</em>
+                </p>
+            {% endfor %}
+            {% if form.non_field_errors %}
+            <div class="messages">
+                <div class="vertical-space">&nbsp;</div>
+                <div class="alert alert-danger center alert-dismissable">
+                    {% for item in form.non_field_errors %}
+                    <p>{{ item }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="page-header">
+                <h4><span class="circled">?</span>{% trans 'Do you already have an account?' %}</h4>
+            </div>
+            <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-lg btn-info"><i class="icon-twitter"></i> | {% trans 'Login with twitter' %}</a>
+            <h4 class="text-center">{% trans 'OR' %}</h4>
+            <form class="form-modal form-validate" method="POST" action="{{ app_path }}">
+                {% csrf_token %}
+                <div>
+                    <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+                        <label class="control-label">{{ form.username.label_tag}}</label>
+                        <!-- {{ form.username }} -->
+                        <input id="id_username" maxlength="254" name="username" type="text" class="form-control">
+                        <span class="help-block">{{ form.username.errors }}</span>
+                    </div>
+                    <div class="form-group {% if form.password.errors %}has-error{% endif %}">
+                        <!-- {{ form.password }} -->
+                        <label class="control-label">{{ form.password.label_tag}}</label>
+                        <input id="id_password" name="password" type="password" class="form-control">
+                        <span class="help-block">{{ form.password.errors }}</span>
+                    </div>
+                    <button name="ad_signup" value="advertiser" type="submit" class="btn btn-inverse">Login</button>
+                    <p><a href="{% url 'signup' %}">{% trans "Don't have an account?" %}</a> or <a href="{% url 'auth_password_reset' %}">{% trans 'Forgot password?' %}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

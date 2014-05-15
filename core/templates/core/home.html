@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+
+{% load i18n %}
+
+{% block extra_styles %}
+    <style type="text/css">
+        .fui-twitter {
+            margin-top: 5px !important;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="header-9-sub">
+        <div class="background">&nbsp;</div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="hero-unit bordered">
+                        <p class="wide-text">Rivrb!</p>
+                    </div>
+                    <p class="wide-text text-warning">{% trans 'The easiest way to automate your retweets and favorites.' %}</p>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="btn btn-lg btn-info">{% trans 'Sign out' %}</a>
+                    {% else %}
+                        <a href="{% url 'social:begin' 'twitter' %}" class="btn btn-lg btn-info"><i class="fui-twitter"></i> | {% trans 'Sign in with twitter' %}</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="nav-steps">
+                <a href="#" class="active">{% trans 'HOME' %}</a>
+                <div class="steps-selectors">
+                    <a href="#" class="active">/</a>
+                </div>
+                <a href="#">{% trans 'SOCIAL' %}</a>
+                <div class="steps-selectors">
+                    <a href="#">/</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% if user.is_authenticated %}
+    <section id="topic" class="content-11">
+        <div class="container ani-processed" style="left: 0px;">
+            <div class="row">
+                <div class="subscribe-form col-sm-7 col-sm-offset-3">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="{% trans 'Type in the hashtag you want to work with' %}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="button">{% trans 'Search #' %}</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                {% include 'core/activity_feed.html' %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% endblock content %}
+
+{% block extra_scripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('html, body').animate({scrollTop: $("#topic").offset().top}, 1000);
+    });
+</script>
+{% endblock extra_scripts %}

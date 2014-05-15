@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> 
+{% load staticfiles i18n %}
+<html lang="en" class="no-js"> 
+<!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Rivrb!</title>
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+        <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" media="screen">
+        <link rel="stylesheet" type="text/css" href={% static "bootstrap/css/bootstrap.css" %} media="screen">
+        <link rel="stylesheet" type="text/css" href={% static "flat-ui/css/style.css" %} media="screen">
+        <link rel="stylesheet" type="text/css" href={% static "flat-ui/css/flat-ui.css" %} media="screen">
+        <link rel="stylesheet" type="text/css" href={% static "css/custom.css" %} media="screen">
+        <!-- <link rel="stylesheet" type="text/css" href={% static "css/font-awesome.min.css" %}> -->
+        <link rel="stylesheet" href={% static "common-files/css/icon-font.css" %}>
+        <!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Abel:400|Oswald:300,400,700" media="all"> -->
+
+        {% block extra_styles %}
+        {% endblock extra_styles %}
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- <link rel="shortcut icon" href={% static "img/favicon.png" %}> -->
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- Wrap all page content here -->
+        <div class="page-wrapper">
+            <!-- header-9 -->
+            <header class="header-9">
+                <div class="container">
+                    <div class="row">
+                        <div class="navbar col-sm-12" role="navigation">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle"></button>
+                                <!-- <a class="brand" href="#"><span class="fui-cmd"> </span></a> -->
+                            </div>
+                            <div class="collapse navbar-collapse">
+                                <ul class="nav">
+                                    <!-- <li><a href="#">UPCOMING EVENTS</a></li> -->
+                                    <!-- <li><a href="#">SUBSCRIPTIONS</a></li> -->
+                                    <li class="active"><a href="#">HOME</a></li>
+                                    <!-- <li><a href="#">BLOG</a></li> -->
+                                    <li><a href="#">CONTACT</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li><a href="#"></a></li>
+                                    <li><a href="#"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            {% block content %}
+            {% endblock content %}
+        </div>
+
+    {% block footer %}
+    {% endblock footer %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src={% static "html5/js/vendor/jquery.min.js" %}><\/script>')</script>
+    <!-- <script src={% static "html5/js/plugins.js" %}></script> -->
+    <!-- <script src={% static "html5/js/main.js" %}></script> -->
+    <script src={% static "flat-ui/js/bootstrap.min.js" %}></script>
+    <script src={% static "flat-ui/js/flatui-radio.js" %}></script>
+    <script src={% static "flat-ui/js/flatui-checkbox.js" %}></script>
+    <script src={% static "flat-ui/js/bootstrap-select.js" %}></script>
+    <script src={% static "flat-ui/js/bootstrap-switch.js" %}></script>
+    <!-- <script src={% static "flat-ui/js/application.js" %}></script> -->
+
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script> -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js"></script> -->
+    <!-- <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
+    <!-- <script>window._ || document.write('<script src={% static "js/underscore-min.js" %}><\/script>')</script> -->
+    <!-- <script>window.Backbone || document.write('<script src={% static "js/backbone-min.js" %}><\/script>')</script> -->
+    <!-- <script src={% static "js/jquery.timeago.js" %}></script> -->
+    <script src={% static "common-files/js/jquery.scrollTo-1.4.3.1-min.js" %}></script>
+    <script src={% static "common-files/js/startup-kit.js" %}></script>
+
+    {% block extra_scripts %}
+    {% endblock extra_scripts %}
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    {% if not DEBUG %}
+        <script>
+            // var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            // (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            // g.src='//www.google-analytics.com/ga.js';
+            // s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    {% endif %}
+    </body>
+</html>
