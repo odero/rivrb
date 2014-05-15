@@ -1,0 +1,126 @@
+
+from ..settings.base import *
+
+import os
+
+SECRET_KEY = 'xxx'
+
+PROJECT_ROOT = os.path.abspath(os.path.join(__file__, os.path.pardir, os.path.pardir))
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+BROKER_URL = 'redis://localhost:6379/0'
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'emails')
+
+MIDDLEWARE_CLASSES += (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+)
+INTERNAL_IPS = ('127.0.0.1',)
+
+INSTALLED_APPS += (
+    'debug_toolbar',
+    # 'waitress',
+)
+
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_media/')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, '../upload_media/')
+
+STATIC_URL = '/static/'
+
+# COMPRESS_URL = STATIC_URL
+
+MEDIA_URL = '/site_media/'
+
+SOCIAL_AUTH_TWITTER_KEY = ''
+SOCIAL_AUTH_TWITTER_SECRET = ''
+
+# Use syncdb for tests instead of South migrations.
+SOUTH_TESTS_MIGRATE = False
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'normal': {
+            'format': '[%(asctime)s]:[%(levelname)s][%(name)s:%(lineno)d] %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'normal'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'accounts': {
+            'handlers': ['console'],
+            'level': 'INFO'
+        },
+        'core': {
+            'handlers': ['console'],
+            'level': 'INFO'
+        },
+    },
+}
+
+try:
+    CACHES = {
+        'default': {
+            # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+            # NOTE: make sure to run python manage.py createcachetable [cache_table_name]
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'retweetit_cache',
+            'TIMEOUT': 500,
+            'BINARY': True,
+            'OPTIONS': {  # Maps to pylibmc "behaviors"
+                'tcp_nodelay': True,
+                'ketama': True,
+            }
+        }
+    }
+except:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+        }
+    }

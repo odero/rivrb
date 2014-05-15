@@ -7,6 +7,9 @@
         .fui-twitter {
             margin-top: 5px !important;
         }
+        .input-group-btn .btn {
+            background: #e74c3c;
+        }
     </style>
 {% endblock %}
 
@@ -46,12 +49,22 @@
                 <div class="subscribe-form col-sm-7 col-sm-offset-3">
                     <form>
                         <div class="input-group">
-                            <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="{% trans 'Type in the hashtag you want to work with' %}">
+                            <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="{% trans 'Type in the topic, name or hashtag you want to work with' %}">
                             <span class="input-group-btn">
-                                <button class="btn btn-danger" type="button">{% trans 'Search #' %}</button>
+                                <button class="btn btn-danger" type="button">{% trans 'Rivrb it!' %}</button>
                             </span>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                <h6>{% trans 'Trending topics' %}:</h6>
+                <p>
+                    {% for topic in trends %}
+                        <a href="{{ topic.url }}" target="_blank">{{ topic.name }}</a>, 
+                    {% endfor %}
+                </p>
                 </div>
             </div>
         </div>
@@ -68,6 +81,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('html, body').animate({scrollTop: $("#topic").offset().top}, 1000);
+        $('.timeago').timeago()
     });
 </script>
 {% endblock extra_scripts %}
