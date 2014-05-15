@@ -23,11 +23,6 @@ TEMPLATE_DEBUG = DEBUG
 # AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 # AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
-# DATABASES = herokuify.get_db_config()       # Database config
-# CACHES = herokuify.get_cache_config()       # Cache config for Memcache/MemCachier
-
-# SECRET_KEY = os.environ.get('DJANGO_SECRET')
-
 # # AWS and herokuify configs
 # DEFAULT_FILE_STORAGE = "herokuify.storage.S3MediaStorage"
 # MEDIA_URL = "//{0}.s3.amazonaws.com/media/".format(AWS_STORAGE_BUCKET_NAME)
@@ -37,6 +32,14 @@ TEMPLATE_DEBUG = DEBUG
 
 # COMPRESS_STORAGE = "herokuify.storage.CachedS3StaticStorage"
 # COMPRESS_OFFLINE = True
+
+
+DATABASES = herokuify.get_db_config()       # Database config
+CACHES = herokuify.get_cache_config()       # Cache config for Memcache/MemCachier
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET')
+
+BROKER_URL = os.environ.get('REDISCLOUD_URL')
 
 INSTALLED_APPS += (
     'waitress',
