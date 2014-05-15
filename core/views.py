@@ -7,6 +7,8 @@ from django.core.cache import cache
 import twitter
 import random
 
+CACHE_TIMEOUT = 60 * 10  # 10 minutes
+
 
 class HomeView(TemplateView):
     template_name = 'core/home.html'
@@ -22,12 +24,16 @@ class HomeView(TemplateView):
         statuses = self.get_top_10_tweets()
         random.shuffle(statuses)
         ctx['statuses'] = statuses
-        ctx['query'] = self.request.GET.get('q')
+        ctx['trends'] = self.get_trending_topics()
+        ctx['query'] = self.request.GET.get('q', '')
         return ctx
 
     def get_top_10_tweets(self):
         # if search term fetch top 10 tweets with that hashtag
         # else fetch top 10 tweets trending hashtag
+        if not self.request.user.is_authenticated():
+            return []
+
         query = self.request.GET.get('q')
 
         tweets = cache.get(query, None)
@@ -38,7 +44,7 @@ class HomeView(TemplateView):
             else:
                 tweets = self.get_trending()
 
-            cache.set(query, tweets)
+            cache.set(query, tweets, CACHE_TIMEOUT)
         return tweets
 
     def favorite_tweets(self, tweets):
@@ -64,10 +70,20 @@ class HomeView(TemplateView):
         for tweet in tweets:
             self.api.PostRetweet(tweet.id)
 
+    def get_trending_topics(self):
+        if not self.request.user.is_authenticated():
+            return []
+
+        trends = cache.get('trends')
+        if not trends:
+            trends = self.api.GetTrendsCurrent()
+            cache.set('trends', trends, CACHE_TIMEOUT)
+        return trends
+
     def get_trending(self):
         # fetch global trends
         # TODO: figure out how to get woeid for location-based trends
-        trends = self.api.GetTrendsCurrent()
+        trends = self.get_trending_topics()
         statuses = self._search_top_10_tweets(trends[0].name)
         # TODO: then cache for 5 minutes
         return statuses
