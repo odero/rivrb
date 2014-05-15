@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load dateparser %}
 
 <div class="feed clearfix">
     <div class="user-pic">
@@ -11,8 +12,8 @@
             </span>
             <span class="feed-time text-muted pull-right">
                 <a href="https://twitter.com/{{ status.user.screen_name }}/status/{{ status.id }}" target="_blank">
-                    <time class="timeago" datetime="{{ status.created_at|date:'c' }}">
-                        {{ status.created_at|date:"F j, o" }}
+                    <time class="timeago" datetime="{{ status.created_at|parse|date:'c' }}">
+                        {{ status.created_at|parse|date:"F j, o" }}
                     </time>
                 </a>
             </span>
