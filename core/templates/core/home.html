@@ -10,6 +10,10 @@
         .input-group-btn .btn {
             background: #e74c3c;
         }
+        span.label.label-danger a {
+            color: #fff !important;
+            font-weight: 300;
+        }
     </style>
 {% endblock %}
 
@@ -57,6 +61,21 @@
                     </form>
                 </div>
             </div>
+            {% if my_topics %}
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                <h6>{% trans 'My selected topics' %}:</h6>
+                <p>
+                    {% for topic in my_topics %}
+                        <span class="label label-danger">
+                            <a href="{{ topic.url }}" target="_blank">{{ topic.name }}</a>&nbsp;
+                            <a href="{% url 'delete_topic' topic.id %}" class="remove-tag">&times;</a>
+                        </span>
+                    {% endfor %}
+                </p>
+                </div>
+            </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
                 <h6>{% trans 'Trending topics' %}:</h6>

@@ -1,3 +1,16 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
-# Create your models here.
+User = get_user_model()
+
+
+class ModelBase(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+
+class Topic(ModelBase):
+    name = models.CharField(max_length=100, unique=True)
+    users = models.ManyToManyField(User, related_name='topics')

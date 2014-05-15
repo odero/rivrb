@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.core.cache import cache
+
+from .models import Topic
 
 import twitter
 import random
@@ -17,16 +19,27 @@ class HomeView(TemplateView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
             self._get_api()
+            query = self.request.GET.get('q', '')
+
+            if query:
+                self.add_topic(query)
         return super(HomeView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
         ctx = super(HomeView, self).get_context_data(**kwargs)
         statuses = self.get_top_10_tweets()
         random.shuffle(statuses)
         ctx['statuses'] = statuses
         ctx['trends'] = self.get_trending_topics()
         ctx['query'] = self.request.GET.get('q', '')
+        if user.is_authenticated():
+            ctx['my_topics'] = user.topics.all()
         return ctx
+
+    def add_topic(self, topic_name):
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        topic.users.add(self.request.user)
 
     def get_top_10_tweets(self):
         # if search term fetch top 10 tweets with that hashtag
