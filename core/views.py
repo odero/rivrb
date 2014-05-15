@@ -53,7 +53,7 @@ class HomeView(TemplateView):
         if tweets is None:
             if query:
                 tweets = self._search_top_10_tweets(query)
-                # self.favorite_tweets(tweets)
+                self.favorite_tweets(tweets[:10])
             else:
                 tweets = self.get_trending()
 
@@ -63,6 +63,7 @@ class HomeView(TemplateView):
     def favorite_tweets(self, tweets):
 
         users = {}
+        random.shuffle(tweets)
         for tweet in tweets:
             # dont try to favorite if had already favorited
             if not tweet.favorited:
@@ -119,3 +120,14 @@ class HomeView(TemplateView):
                 consumer_key=settings.SOCIAL_AUTH_TWITTER_KEY, consumer_secret=settings.SOCIAL_AUTH_TWITTER_SECRET,
                 access_token_key=token_key, access_token_secret=token_secret)
         return self.api
+
+
+class DeleteTopicView(TemplateView):
+    template_name = 'core/home.html'
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated():
+            user.topics.filter(pk=kwargs.get('topic_id')).delete()
+
+        return redirect('home')
