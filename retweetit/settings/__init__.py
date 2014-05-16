@@ -1,4 +1,4 @@
 try:
-    from ..settings.local import *
+    from retweetit.settings.local import *
 except Exception, e:
-    from ..settings.production import *
+    from retweetit.settings.production import *
