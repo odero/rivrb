@@ -1,6 +1,6 @@
 import os
 
-from .settings.base import *
+from ..settings.base import *
 
 import herokuify
 
@@ -12,6 +12,8 @@ from herokuify.mail.sendgrid import *       # ... or Sendgrid
 DEBUG = bool(os.environ.get('DEBUG_MODE')) or False
 
 TEMPLATE_DEBUG = DEBUG
+
+ALLOWED_HOSTS = ['rivrb.herokuapp.com']
 
 # To not use https which is default
 # AWS_S3_SECURE_URLS = False
@@ -45,19 +47,12 @@ INSTALLED_APPS += (
     'waitress',
 )
 
-
 # Twitter OAuth Keys
 SOCIAL_AUTH_TWITTER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
 SOCIAL_AUTH_TWITTER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET')
 
 TWITTER_ACCESS_TOKEN_KEY = os.environ.get('TWITTER_ACCESS_TOKEN_KEY')
 TWITTER_ACCESS_TOKEN_SECRET = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
-
-SOCIAL_AUTH_LOGIN_URL = '/home/'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = LOGIN_REDIRECT_URL
-SOCIAL_AUTH_LOGIN_ERROR_URL = SOCIAL_AUTH_LOGIN_URL
-
-SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
