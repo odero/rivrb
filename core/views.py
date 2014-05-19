@@ -4,10 +4,12 @@ from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.core.cache import cache
 
-from .models import Topic
+from .models import Topic, Location
 
 import twitter
 import random
+
+import requests
 
 CACHE_TIMEOUT = 60 * 10  # 10 minutes
 
@@ -88,24 +90,87 @@ class HomeView(TemplateView):
         if not self.request.user.is_authenticated():
             return []
 
-        trends = cache.get('trends')
-        if not trends:
-            trends = self.api.GetTrendsCurrent()
-            cache.set('trends', trends, CACHE_TIMEOUT)
+        tweep = self.get_twitter_profile()
+        if not tweep:
+            return []
+
+        # use twitter timezone
+        # if no timezone use twitter location
+        # else fallback to worldwide trends
+        if tweep.time_zone:
+            loc_id = self.get_woeid(tweep.time_zone)
+        elif tweep.location:
+            loc_id = self.get_woeid(tweep.location)
+
+        if loc_id:
+            trends = self.get_location_trends(loc_id)
+        else:
+            trends = self.get_global_trends()
+
         return trends
 
+    def get_twitter_profile(self):
+        tweep = cache.get(self.request.user.username)
+        if not tweep:
+            tweep = self.api.GetUser(screen_name=self.request.user.username)
+            if not tweep:
+                return None
+            cache.set(tweep.screen_name, tweep)
+        return tweep
+
     def get_trending(self):
-        # fetch global trends
-        # TODO: figure out how to get woeid for location-based trends
         trends = self.get_trending_topics()
-        statuses = self._search_top_10_tweets(trends[0].name)
-        # TODO: then cache for 5 minutes
+        statuses_1 = self._search_top_10_tweets(trends[0].name)
+        statuses_2 = self._search_top_10_tweets(trends[1].name)
+        statuses = statuses_1 + statuses_2
         return statuses
 
     def _search_top_10_tweets(self, search_term):
         # fetch
         statuses = self.api.GetSearch(search_term)
         return statuses
+
+    def get_woeid(self, loc_name):
+        location = Location.objects.filter(name=loc_name)[:1]
+
+        if location.exists():
+            # location[0].users.add(self.request.user)
+            return location[0].woeid
+
+        url = 'https://query.yahooapis.com/v1/public/yql?q=select * from geo.places where text="{0}"&format=json'
+        url = url.format(loc_name)
+
+        try:
+            resp = requests.get(url)
+            json_resp = resp.json()
+            places = json_resp['query']['results']['place']
+
+            # query returns multiple places
+            # give pref to first list item
+            woeid = places[0]['woeid']
+            name = places[0]['name']
+            location = Location.objects.create(name=name, woeid=woeid)
+            # location.users.add(self.request.user)
+            return woeid
+        except Exception, e:
+            return 0
+
+    def get_location_trends(self, woeid):
+        cache_key = '{0}-trends'.format(woeid)
+        trends = cache.get(cache_key)
+
+        if not trends:
+            trends = self.api.GetTrendsWoeid(woeid)
+            cache.set(cache_key, trends, CACHE_TIMEOUT)
+        return trends
+
+    def get_global_trends(self):
+        trends = cache.get('global-trends')
+        if not trends:
+            trends = self.api.GetTrendsCurrent()
+            cache.set('global-trends', trends, CACHE_TIMEOUT)
+
+        return trends
 
     def _get_api(self):
         user = self.request.user
