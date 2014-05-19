@@ -14,3 +14,9 @@ class ModelBase(models.Model):
 class Topic(ModelBase):
     name = models.CharField(max_length=100, unique=True)
     users = models.ManyToManyField(User, related_name='topics')
+
+
+class Location(ModelBase):
+    name = models.CharField(max_length=200, unique=True)
+    woeid = models.IntegerField()
+    # users = models.ManyToManyField(User, related_name='locations')
