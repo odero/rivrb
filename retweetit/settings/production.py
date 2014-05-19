@@ -51,9 +51,6 @@ INSTALLED_APPS += (
 SOCIAL_AUTH_TWITTER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
 SOCIAL_AUTH_TWITTER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET')
 
-TWITTER_ACCESS_TOKEN_KEY = os.environ.get('TWITTER_ACCESS_TOKEN_KEY')
-TWITTER_ACCESS_TOKEN_SECRET = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
-
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mandrillapp.com'
