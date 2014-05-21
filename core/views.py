@@ -55,6 +55,7 @@ class HomeView(TemplateView):
         if tweets is None:
             if query:
                 tweets = self._search_top_10_tweets(query)
+                random.shuffle(tweets)
                 self.favorite_tweets(tweets[:10])
             else:
                 tweets = self.get_trending()
@@ -65,7 +66,7 @@ class HomeView(TemplateView):
     def favorite_tweets(self, tweets):
 
         users = {}
-        random.shuffle(tweets)
+
         for tweet in tweets:
             # dont try to favorite if had already favorited
             if not tweet.favorited:
@@ -80,7 +81,10 @@ class HomeView(TemplateView):
                         users[sender] += 1
                 else:
                     users[sender] = 1
-                self.api.CreateFavorite(id=tweet.id)
+                try:
+                    self.api.CreateFavorite(id=tweet.id)
+                except Exception:
+                    pass
 
     def retweet(self, tweets):
         for tweet in tweets:
