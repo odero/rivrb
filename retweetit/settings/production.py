@@ -57,3 +57,13 @@ EMAIL_HOST = 'smtp.mandrillapp.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('MANDRILL_USERNAME')
 EMAIL_HOST_PASSWORD = os.environ.get('MANDRILL_APIKEY')
+
+
+def get_env_int(env_var, default=0):
+    try:
+        x = int(os.environ.get(env_var, default))
+        return x
+    except Exception:
+        return default
+
+TWEETS_APPLIED = get_env_int('TWEETS_APPLIED', 15)

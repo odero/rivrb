@@ -21,7 +21,7 @@ class HomeView(TemplateView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
             self._get_api()
-            query = self.request.GET.get('q', '')
+            query = self.request.GET.get('q', '').strip()
 
             if query:
                 self.add_topic(query)
@@ -34,7 +34,7 @@ class HomeView(TemplateView):
         random.shuffle(statuses)
         ctx['statuses'] = statuses
         ctx['trends'] = self.get_trending_topics()
-        ctx['query'] = self.request.GET.get('q', '')
+        ctx['query'] = self.request.GET.get('q', '').strip()
         if user.is_authenticated():
             ctx['my_topics'] = user.topics.all()
         return ctx
@@ -49,14 +49,14 @@ class HomeView(TemplateView):
         if not self.request.user.is_authenticated():
             return []
 
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('q', '').strip()
 
         tweets = cache.get(query, None)
         if tweets is None:
             if query:
                 tweets = self._search_top_10_tweets(query)
                 random.shuffle(tweets)
-                self.favorite_tweets(tweets[:10])
+                self.favorite_tweets(tweets[:settings.TWEETS_APPLIED])
             else:
                 tweets = self.get_trending()
 
