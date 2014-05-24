@@ -40,7 +40,7 @@ class HomeView(TemplateView):
         return ctx
 
     def add_topic(self, topic_name):
-        topic, created = Topic.objects.get_or_create(name=topic_name)
+        topic, created = Topic.objects.get_or_create(name__iexact=topic_name)
         topic.users.add(self.request.user)
 
     def get_top_10_tweets(self):
@@ -135,7 +135,7 @@ class HomeView(TemplateView):
         return statuses
 
     def get_woeid(self, loc_name):
-        location = Location.objects.filter(name=loc_name)[:1]
+        location = Location.objects.filter(name__iexact=loc_name)[:1]
 
         if location.exists():
             # location[0].users.add(self.request.user)
