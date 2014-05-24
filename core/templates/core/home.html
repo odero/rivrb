@@ -55,7 +55,7 @@
                         <div class="input-group">
                             <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="{% trans 'Type in the topic, name or hashtag you want to work with' %}">
                             <span class="input-group-btn">
-                                <button class="btn btn-danger" type="button">{% trans 'Rivrb it!' %}</button>
+                                <button class="btn btn-danger" type="submit">{% trans 'Rivrb it!' %}</button>
                             </span>
                         </div>
                     </form>
@@ -68,7 +68,7 @@
                 <p>
                     {% for topic in my_topics %}
                         <span class="label label-danger">
-                            <a href="{{ topic.url }}" target="_blank">{{ topic.name }}</a>&nbsp;
+                            <a href="/?q={{ topic.name }}">{{ topic.name }}</a>&nbsp;
                             <a href="{% url 'delete_topic' topic.id %}" class="remove-tag">&times;</a>
                         </span>
                     {% endfor %}

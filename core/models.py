@@ -15,8 +15,14 @@ class Topic(ModelBase):
     name = models.CharField(max_length=100, unique=True)
     users = models.ManyToManyField(User, related_name='topics')
 
+    def __unicode__(self):
+        return self.name
+
 
 class Location(ModelBase):
     name = models.CharField(max_length=200, unique=True)
     woeid = models.IntegerField()
     # users = models.ManyToManyField(User, related_name='locations')
+
+    def __unicode__(self):
+        return self.name
