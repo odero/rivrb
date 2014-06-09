@@ -201,6 +201,8 @@ class DeleteTopicView(TemplateView):
     def get(self, request, *args, **kwargs):
         user = request.user
         if user.is_authenticated():
-            user.topics.filter(pk=kwargs.get('topic_id')).delete()
+            topics = Topic.objects.filter(pk=kwargs.get('topic_id'))
+            if topics.exists():
+                user.topics.remove(topics[0])
 
         return redirect('home')
