@@ -40,7 +40,11 @@ class HomeView(TemplateView):
         return ctx
 
     def add_topic(self, topic_name):
-        topic, created = Topic.objects.get_or_create(name__iexact=topic_name)
+        topics = Topic.objects.filter(name__iexact=topic_name)
+        if topics.exists():
+            topic = topics[0]
+        else:
+            topic = Topic.objects.create(name=topic_name)
         topic.users.add(self.request.user)
 
     def get_top_10_tweets(self):
